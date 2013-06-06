@@ -1,5 +1,6 @@
 *.gem
 *.rbc
+*.swp
 .bundle
 .config
 coverage
@@ -16,3 +17,20 @@ tmp
 .yardoc
 _yardoc
 doc/
+
+.jbundler
+Jarfile.lock
+Gemfile.lock
+
+.DS_Store
+
+# Build directory
+killbill-zendesk/
+
+# Config file
+zendesk.yml
+
+target
+pom.xml.asc
+
+.idea/
