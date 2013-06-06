@@ -53,4 +53,22 @@ The plugin also creates a killbill identity:
   </tr>
 </table>
 
+Configuration
+-------------
 
+The plugin expects a `zendesk.yml` configuration file containing the following:
+
+```
+:zendesk:
+  :subdomain: 'mysubdomain'
+  :username: 'email@domain.com'
+  :password: 'password'
+# Alternatively, to use Token Authentication or OAuth
+#token: 'kX53RIXZKUFhZxSYhRxe7QGFocTkDmmERDxpcddF' 
+#access_token: 'kX53RIXZKUFhZxSYhRxe7QGFocTkDmmERDxpcddF'
+# Optional
+#  :retry: true
+```
+
+By default, the plugin will look at the plugin directory root (where `killbill.properties` is located) to find this file.
+Alternatively, set the Kill Bill system property `-Dcom.ning.billing.osgi.bundles.jruby.conf.dir=/my/directory` to specify another location.
