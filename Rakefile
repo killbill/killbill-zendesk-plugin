@@ -27,4 +27,4 @@ require 'killbill/rake_task'
 Killbill::PluginHelper.install_tasks
 
 # Run tests by default
-task :default => :spec
+task :default => 'test:spec'
