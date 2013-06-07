@@ -38,7 +38,7 @@ module Killbill::Zendesk
         if lookup_key_s =~ /[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}/
           lookup_kb_account(Killbill::Plugin::Model::UUID.new(lookup_key_s))
         else
-          @kb_apis.get_account_by_external_key(lookup_key_s)
+          @kb_apis.get_account_by_key(lookup_key_s)
         end
       end
     end

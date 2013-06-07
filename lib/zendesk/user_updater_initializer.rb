@@ -9,7 +9,7 @@ module Killbill::Zendesk
       begin
         @config = YAML.load_file("#{conf_dir}/zendesk.yml")
       rescue Errno::ENOENT
-        @logger.warn "Unable to find the config file #{conf_dir}/zendesk.yml"
+        logger.warn "Unable to find the config file #{conf_dir}/zendesk.yml"
         return
       end
 
