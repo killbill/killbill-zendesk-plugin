@@ -1,4 +1,5 @@
 require 'active_record'
+require 'sinatra'
 
 require 'killbill'
 require 'zendesk_api'
@@ -8,8 +9,8 @@ require 'zendesk/user_updater'
 
 module Killbill::Zendesk
   class ZendeskPlugin < Killbill::Plugin::Notification
+    include Singleton
 
-    # For testing
     attr_reader :updater
 
     def start_plugin

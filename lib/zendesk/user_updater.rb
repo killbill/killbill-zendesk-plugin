@@ -6,8 +6,8 @@ module Killbill::Zendesk
       @logger = logger
     end
 
-    def update(kb_account_id)
-      kb_account = @kb_apis.get_account_by_id(kb_account_id)
+    def update(lookup_key)
+      kb_account = lookup_kb_account(lookup_key)
 
       user = find_by_kb_account(kb_account)
       user = create_user(kb_account) if user.nil?
@@ -22,11 +22,28 @@ module Killbill::Zendesk
 
       if user.save
         @logger.info "Successfully updated #{user.name} in Zendesk: #{user.url}"
+        user.url
       else
         @logger.warn "Unable to update #{user.name} in Zendesk: #{user.url}"
+        nil
       end
     end
 
+    # Find the Kill Bill account associated with that lookup_key (account id or external key)
+    def lookup_kb_account(lookup_key)
+      if lookup_key.is_a?(Killbill::Plugin::Model::UUID)
+        @kb_apis.get_account_by_id(lookup_key)
+      else
+        lookup_key_s = lookup_key.to_s
+        if lookup_key_s =~ /[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}/
+          lookup_kb_account(Killbill::Plugin::Model::UUID.new(lookup_key_s))
+        else
+          @kb_apis.get_account_by_external_key(lookup_key_s)
+        end
+      end
+    end
+
+    # Build the Zendesk details field (address information)
     def build_details_field(kb_account)
       details = [kb_account.address1, kb_account.address2, kb_account.city, kb_account.state_or_province, kb_account.postal_code, kb_account.country]
       (details.reject { |detail| detail.blank? }).join(', ')
