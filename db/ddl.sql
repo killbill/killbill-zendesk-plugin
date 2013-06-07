@@ -4,5 +4,7 @@ CREATE TABLE `zendesk_users` (
   `zd_user_id` int(11) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_zendesk_users_on_kb_account_id` (`kb_account_id`),
+  UNIQUE KEY `index_zendesk_users_on_zd_user_id` (`zd_user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

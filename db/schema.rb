@@ -7,4 +7,7 @@ ActiveRecord::Schema.define(:version => 20130606153635) do
     t.datetime 'created_at', :null => false
     t.datetime 'updated_at', :null => false
   end
+
+  add_index(:zendesk_users, :kb_account_id, :unique => true)
+  add_index(:zendesk_users, :zd_user_id, :unique => true)
 end
