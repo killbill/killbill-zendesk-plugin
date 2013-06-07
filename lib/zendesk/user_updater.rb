@@ -18,13 +18,18 @@ module Killbill::Zendesk
       user.timezone = kb_account.time_zone
       user.email = kb_account.email
       user.phone = kb_account.phone
-      user.details = "#{kb_account.address1},#{kb_account.address2},#{kb_account.city},#{kb_account.state_or_province},#{kb_account.postal_code},#{kb_account.country}"
+      user.details = build_details_field(kb_account)
 
       if user.save
         @logger.info "Successfully updated #{user.name} in Zendesk: #{user.url}"
       else
         @logger.warn "Unable to update #{user.name} in Zendesk: #{user.url}"
       end
+    end
+
+    def build_details_field(kb_account)
+      details = [kb_account.address1, kb_account.address2, kb_account.city, kb_account.state_or_province, kb_account.postal_code, kb_account.country]
+      (details.reject { |detail| detail.blank? }).join(', ')
     end
 
     def create_user(kb_account)
