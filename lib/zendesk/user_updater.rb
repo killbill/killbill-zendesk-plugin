@@ -32,6 +32,7 @@ module Killbill::Zendesk
       (details.reject { |detail| detail.blank? }).join(', ')
     end
 
+    # Create a user in Zendesk and save the id mapping locally
     def create_user(kb_account)
       # Create the user in Zendesk
       user = @client.users.create(:name => kb_account.name)
@@ -47,9 +48,8 @@ module Killbill::Zendesk
       user
     end
 
+    # Find the Zendesk user associated with that Kill Bill account
     def find_by_kb_account(kb_account)
-      zd_account = nil
-
       # Do we have already a mapping for that user?
       zd_account = find_by_id(kb_account.id.to_s)
       return zd_account if zd_account
