@@ -45,6 +45,14 @@ module Killbill::Zendesk
         config.logger = @logger
       end
 
+      if defined?(JRUBY_VERSION)
+        # See https://github.com/jruby/activerecord-jdbc-adapter/issues/302
+        require 'jdbc/mysql'
+        Jdbc::MySQL.load_driver(:require) if Jdbc::MySQL.respond_to?(:load_driver)
+      end
+
+      ActiveRecord::Base.establish_connection(@config[:database])
+
       @updater = UserUpdater.new(client, @kb_apis, @logger)
     end
   end

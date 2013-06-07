@@ -68,6 +68,16 @@ The plugin expects a `zendesk.yml` configuration file containing the following:
 #access_token: 'kX53RIXZKUFhZxSYhRxe7QGFocTkDmmERDxpcddF'
 # Optional
 #  :retry: true
+
+:database:
+  :adapter: 'sqlite3'
+  :database: 'test.db'
+# For MySQL
+#  :adapter: 'jdbc'
+#  :username: 'your-username'
+#  :password: 'your-password'
+#  :driver: 'com.mysql.jdbc.Driver'
+#  :url: 'jdbc:mysql://127.0.0.1:3306/your-database'
 ```
 
 By default, the plugin will look at the plugin directory root (where `killbill.properties` is located) to find this file.
