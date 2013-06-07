@@ -27,7 +27,7 @@ end
 
 describe Killbill::Zendesk::ZendeskPlugin do
   before(:each) do
-    @plugin = Killbill::Zendesk::ZendeskPlugin.instance
+    @plugin = Killbill::Zendesk::ZendeskPlugin.new
     @plugin.conf_dir = File.expand_path(File.dirname(__FILE__) + '../../../../')
 
     logger = Logger.new(STDOUT)

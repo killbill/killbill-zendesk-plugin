@@ -1,17 +1,16 @@
 configure do
   # Usage: rackup -Ilib -E test
-  if (development? or test?) and !Killbill::Zendesk::ZendeskPlugin.instance.active
+  if (development? or test?) and !Killbill::Zendesk::UserUpdaterInitializer.instance.initialized?
     require 'logger'
-
-    Killbill::Zendesk::ZendeskPlugin.instance.conf_dir = File.expand_path(File.dirname(__FILE__) + '../../../../')
-    Killbill::Zendesk::ZendeskPlugin.instance.logger = Logger.new(STDOUT)
-    Killbill::Zendesk::ZendeskPlugin.instance.start_plugin
+    Killbill::Zendesk::UserUpdaterInitializer.instance.initialize! File.expand_path(File.dirname(__FILE__) + '../../../../'),
+                                                                   nil,
+                                                                   Logger.new(STDOUT)
   end
 end
 
 # curl -v -d'webrick=stupid' -XPUT http://127.0.0.1:9292/plugins/killbill-zendesk/users/6939c8c0-cf89-11e2-8b8b-0800200c9a66
 put '/plugins/killbill-zendesk/users/:id' do
-  zendesk_user_url = Killbill::Zendesk::ZendeskPlugin.instance.updater.update(params[:id])
+  zendesk_user_url = Killbill::Zendesk::UserUpdaterInitializer.instance.updater.update(params[:id])
 
   if zendesk_user_url
     redirect zendesk_user_url
