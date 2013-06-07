@@ -6,8 +6,8 @@ class KillbillApiWithFakeGetAccountById < Killbill::Plugin::KillbillApi
     @accounts = {}
   end
 
-  def create_account(id, name, email)
-    @accounts[id.to_s] = Killbill::Plugin::Model::Account.new(id, nil, nil, nil, nil, name, 1, email, 1, 'USD', nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, false, true)
+  def create_account(id, external_key, name, email)
+    @accounts[id.to_s] = Killbill::Plugin::Model::Account.new(id, nil, nil, nil, external_key, name, 1, email, 1, 'USD', nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, false, true)
   end
 
   def get_account_by_id(id)
@@ -44,9 +44,43 @@ describe Killbill::Zendesk::ZendeskPlugin do
   end
 
   it 'should be able to create and update a user' do
-    kb_account_id = Killbill::Plugin::Model::UUID.new(Time.now.to_i.to_s + '-test')
-    @plugin.kb_apis.create_account(kb_account_id, 'Test tester', 'test@tester.com')
+    external_key, kb_account_id = create_kb_account
 
+    # Verify the initial state of our table
+    Killbill::Zendesk::ZendeskUser.count.should == 0
+
+    # Verify the account doesn't exist yet
+    @plugin.updater.find_by_external_id(external_key).should be_nil
+
+    # Send a creation event
     @plugin.on_event MockEvent.new(Killbill::Plugin::Model::ExtBusEventType.new(:ACCOUNT_CREATION), kb_account_id)
+
+    # We should now verify the account exists, but we can't, due to indexing lag :/
+    #@plugin.updater.find_by_external_id(external_key).email.should == email
+    # Instead, we use our table
+    Killbill::Zendesk::ZendeskUser.count.should == 1
+
+    # Send an update event
+    @plugin.on_event MockEvent.new(Killbill::Plugin::Model::ExtBusEventType.new(:ACCOUNT_CHANGE), kb_account_id)
+
+    # Verify we didn't create dups
+    #@plugin.updater.find_all_by_external_id(external_key).count.should == 1
+    Killbill::Zendesk::ZendeskUser.count.should == 1
+
+    # Create a new user
+    external_key, kb_account_id = create_kb_account
+    @plugin.on_event MockEvent.new(Killbill::Plugin::Model::ExtBusEventType.new(:ACCOUNT_CREATION), kb_account_id)
+
+    Killbill::Zendesk::ZendeskUser.count.should == 2
+  end
+
+  private
+
+  def create_kb_account
+    external_key = Time.now.to_i.to_s + '-test'
+    kb_account_id = Killbill::Plugin::Model::UUID.new(external_key)
+    email = external_key + '@tester.com'
+    @plugin.kb_apis.create_account(kb_account_id, external_key, 'Test tester', email)
+    return external_key, kb_account_id
   end
 end

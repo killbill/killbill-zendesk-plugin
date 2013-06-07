@@ -1,10 +1,16 @@
+require 'active_record'
+
 require 'killbill'
 require 'zendesk_api'
 
+require 'zendesk/zendesk_user'
 require 'zendesk/user_updater'
 
 module Killbill::Zendesk
   class ZendeskPlugin < Killbill::Plugin::Notification
+
+    # For testing
+    attr_reader :updater
 
     def start_plugin
       super
