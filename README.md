@@ -33,25 +33,6 @@ User data mapping
   </tr>
 </table>
 
-Kill Bill identity
-------------------
-
-The plugin also creates a killbill identity:
-
-<table>
-  <tr>
-    <th>Zendesk attribute</th><th>Value</th>
-  </tr>
-  <tr>
-    <td>type</td><td>killbill</td>
-  </tr>
-  <tr>
-    <td>value</td><td><em>Kill Bill account id</em></td>
-  </tr>
-  <tr>
-    <td>verified</td><td>true</td>
-  </tr>
-</table>
 
 Requirements
 ------------
