@@ -34,6 +34,27 @@ User data mapping
 </table>
 
 
+Usage
+-----
+
+The plugin will automcatically listen to all account events (creation or update), and create or update the associated user in Zendesk.
+
+If you need to trigger a refresh manually, the plugin exposes the following endpoint:
+
+```
+curl -v \
+     -d'webrick=stupid' \
+     -XPUT \
+     "http://$HOST:8080/plugins/killbill-zendesk/users/<kb account id or kb external key>"
+```
+
+Given a Kill Bill account id or Zendesk user id, you can retrieve the Kill Bill - Zendesk mapping via:
+
+```
+curl -v \
+     "http://$HOST:8080/plugins/killbill-zendesk/users/<kb account id or kb external key>"
+```
+
 Requirements
 ------------
 
