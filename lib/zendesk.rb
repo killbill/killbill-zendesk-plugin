@@ -19,6 +19,11 @@ module Killbill::Zendesk
       @updater = Killbill::Zendesk::UserUpdaterInitializer.instance.initialize!(@conf_dir, @kb_apis, @logger)
     end
 
+    def after_request
+      # return DB connections to the Pool if required
+      ActiveRecord::Base.connection.close
+    end
+
     def on_event(event)
       @updater.update(event.account_id) if [:ACCOUNT_CREATION, :ACCOUNT_CHANGE].include?(event.event_type.enum)
     end

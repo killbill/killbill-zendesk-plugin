@@ -8,6 +8,11 @@ configure do
   end
 end
 
+after do
+  # return DB connections to the Pool if required
+  ActiveRecord::Base.connection.close
+end
+
 # curl -v -d'webrick=stupid' -XPUT http://127.0.0.1:9292/plugins/killbill-zendesk/users/6939c8c0-cf89-11e2-8b8b-0800200c9a66
 put '/plugins/killbill-zendesk/users/:id' do
   zendesk_user_url = Killbill::Zendesk::UserUpdaterInitializer.instance.updater.update(params[:id])
