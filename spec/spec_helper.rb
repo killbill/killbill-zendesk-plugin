@@ -2,6 +2,7 @@ require 'bundler'
 require 'zendesk'
 
 require 'logger'
+require 'ostruct'
 
 require 'rspec'
 

@@ -26,6 +26,22 @@ describe Killbill::Zendesk::UserUpdater do
     updater.build_details_field(account).should == '493 Slro road, apt 33, Fola, FG, 140, Floq'
   end
 
+  it 'should save the mappings locally' do
+    updater = Killbill::Zendesk::UserUpdater.new(nil, nil, nil)
+    kb_account = OpenStruct.new(:id => '11-22-33-44-55')
+    zd_user = OpenStruct.new(:id => 9402871)
+
+    Killbill::Zendesk::ZendeskUser.all.size.should == 0
+
+    updater.save_kb_zd_mapping kb_account, zd_user
+    Killbill::Zendesk::ZendeskUser.all.size.should == 1
+    Killbill::Zendesk::ZendeskUser.find_by_kb_account_id(kb_account.id).zd_user_id.should == zd_user.id
+
+    updater.save_kb_zd_mapping kb_account, zd_user
+    Killbill::Zendesk::ZendeskUser.all.size.should == 1
+    Killbill::Zendesk::ZendeskUser.find_by_kb_account_id(kb_account.id).zd_user_id.should == zd_user.id
+  end
+
   private
 
   def build_account(address1, address2, city, state_or_province, postal_code, country)

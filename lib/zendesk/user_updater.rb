@@ -11,6 +11,7 @@ module Killbill::Zendesk
 
       user = find_by_kb_account(kb_account)
       user = create_user(kb_account) if user.nil?
+      save_kb_zd_mapping(kb_account, user)
 
       user.name = kb_account.name
       user.external_id = kb_account.external_key || kb_account.id.to_s
@@ -49,20 +50,19 @@ module Killbill::Zendesk
       (details.reject { |detail| detail.blank? }).join(', ')
     end
 
-    # Create a user in Zendesk and save the id mapping locally
+    # Create a user in Zendesk
     def create_user(kb_account)
-      # Create the user in Zendesk
-      user = @client.users.create(:name => kb_account.name)
+      @client.users.create(:name => kb_account.name)
+    end
 
+    def save_kb_zd_mapping(kb_account, user)
       # Save the mapping locally - this is required due to the indexing lag on the Zendesk side,
       # see https://support.zendesk.com/entries/20239737:
       #   When you add new data to your Zendesk, it typically takes about 2 to 3 minutes before it's indexed and can be searched.
       # This is unacceptable for us: if an account creation event is quickly followed by a account update event,
       # we wouldn't be able to retrieve the user, potentially causing duplicates and/or triggering validation errors, e.g.
       #   Email 1370587241-test@tester.com is already being used by another user
-      ZendeskUser.create! :kb_account_id => kb_account.id.to_s, :zd_user_id => user.id
-
-      user
+      ZendeskUser.where(:kb_account_id => kb_account.id.to_s, :zd_user_id => user.id).first_or_create!
     end
 
     # Find the Zendesk user associated with that Kill Bill account
