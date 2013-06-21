@@ -25,7 +25,7 @@ module Killbill::Zendesk
     end
 
     def on_event(event)
-      @updater.update(event.account_id) if [:ACCOUNT_CREATION, :ACCOUNT_CHANGE].include?(event.event_type.enum)
+      @updater.update(event.account_id) if [:ACCOUNT_CREATION, :ACCOUNT_CHANGE].include?(event.event_type)
     end
   end
 end

@@ -14,7 +14,7 @@ module Killbill::Zendesk
       save_kb_zd_mapping(kb_account, user)
 
       user.name = kb_account.name
-      user.external_id = kb_account.external_key || kb_account.id.to_s
+      user.external_id = kb_account.external_key || kb_account.id
       user.locale = kb_account.locale
       user.timezone = kb_account.time_zone
       user.email = kb_account.email
@@ -32,15 +32,10 @@ module Killbill::Zendesk
 
     # Find the Kill Bill account associated with that lookup_key (account id or external key)
     def lookup_kb_account(lookup_key)
-      if lookup_key.is_a?(Killbill::Plugin::Model::UUID)
-        @kb_apis.get_account_by_id(lookup_key)
+      if lookup_key =~ /[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}/
+        @kb_apis.account_user_api.get_account_by_id(lookup_key, @kb_apis.create_context)
       else
-        lookup_key_s = lookup_key.to_s
-        if lookup_key_s =~ /[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}/
-          lookup_kb_account(Killbill::Plugin::Model::UUID.new(lookup_key_s))
-        else
-          @kb_apis.get_account_by_key(lookup_key_s)
-        end
+        @kb_apis.account_user_api.get_account_by_key(lookup_key, @kb_apis.create_context)
       end
     end
 
@@ -62,13 +57,13 @@ module Killbill::Zendesk
       # This is unacceptable for us: if an account creation event is quickly followed by a account update event,
       # we wouldn't be able to retrieve the user, potentially causing duplicates and/or triggering validation errors, e.g.
       #   Email 1370587241-test@tester.com is already being used by another user
-      ZendeskUser.where(:kb_account_id => kb_account.id.to_s, :zd_user_id => user.id).first_or_create!
+      ZendeskUser.where(:kb_account_id => kb_account.id, :zd_user_id => user.id).first_or_create!
     end
 
     # Find the Zendesk user associated with that Kill Bill account
     def find_by_kb_account(kb_account)
       # Do we have already a mapping for that user?
-      zd_account = find_by_id(kb_account.id.to_s)
+      zd_account = find_by_id(kb_account.id)
       return zd_account if zd_account
 
       # TODO In the search results below, should we worry about potential dups?
@@ -79,7 +74,7 @@ module Killbill::Zendesk
       return zd_account if zd_account
 
       # ...or the Kill Bill account id
-      zd_account = find_by_external_id(kb_account.id.to_s)
+      zd_account = find_by_external_id(kb_account.id)
       return zd_account if zd_account
 
       # At this point, we haven't matched this user yet. To reconcile it, use the email address which is guaranteed

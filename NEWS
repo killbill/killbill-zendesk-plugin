@@ -1,0 +1,9 @@
+0.2.0
+    Save local mapping if the user already exists in Zendesk
+    Update to killbill 1.1.2
+
+0.1.1
+    Fix activerecord connections leak
+
+0.1.0
+    Initial version

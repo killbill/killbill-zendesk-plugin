@@ -45,6 +45,13 @@ describe Killbill::Zendesk::UserUpdater do
   private
 
   def build_account(address1, address2, city, state_or_province, postal_code, country)
-    Killbill::Plugin::Model::Account.new(nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, address1, address2, nil, city, state_or_province, postal_code, country, nil, nil, nil)
+    account = Killbill::Plugin::Model::Account.new
+    account.address1 = address1
+    account.address2 = address2
+    account.city = city
+    account.state_or_province = state_or_province
+    account.postal_code = postal_code
+    account.country = country
+    account
   end
 end
