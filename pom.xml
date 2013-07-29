@@ -25,7 +25,7 @@
     <groupId>com.ning.killbill.ruby</groupId>
     <artifactId>zendesk-plugin</artifactId>
     <packaging>pom</packaging>
-    <version>0.4.0</version>
+    <version>0.5.0</version>
     <name>zendesk-plugin</name>
     <url>http://github.com/killbill/killbill-zendesk-plugin</url>
     <description>Plugin to mirror Kill Bill data into Zendesk</description>
