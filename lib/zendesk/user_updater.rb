@@ -11,6 +11,12 @@ module Killbill::Zendesk
 
       user = find_by_kb_account(kb_account)
       user = create_user(kb_account) if user.nil?
+      if user.nil?
+        @logger.warn "Failed to create user in Zendesk for account #{lookup_key}"
+        return
+      end
+
+
       save_kb_zd_mapping(kb_account, user)
 
       user.name = kb_account.name
