@@ -7,4 +7,4 @@ CREATE TABLE `zendesk_users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_zendesk_users_on_kb_account_id` (`kb_account_id`),
   UNIQUE KEY `index_zendesk_users_on_zd_user_id` (`zd_user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_bin;
