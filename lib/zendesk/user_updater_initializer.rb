@@ -13,6 +13,8 @@ module Killbill::Zendesk
         return
       end
 
+      logger.log_level = Logger::DEBUG if (@config[:logger] || {})[:debug]
+
       client = ZendeskAPI::Client.new do |config|
         config.url = "https://#{@config[:zendesk][:subdomain]}.zendesk.com/api/v2"
 
@@ -33,6 +35,7 @@ module Killbill::Zendesk
       end
 
       ActiveRecord::Base.establish_connection(@config[:database])
+      ActiveRecord::Base.logger = logger
 
       @updater = UserUpdater.new(client, kb_apis, logger)
     end
