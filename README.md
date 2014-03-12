@@ -3,7 +3,7 @@ killbill-zendesk-plugin
 
 Plugin to mirror Kill Bill data into Zendesk.
 
-Release builds are available on [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.ning.killbill.ruby%22%20AND%20a%3A%22zendesk-plugin%22) with coordinates `com.ning.killbill.ruby:zendesk-plugin`.
+Release builds are available on [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.kill-bill.billing.plugin.ruby%22%20AND%20a%3A%22zendesk-plugin%22) with coordinates `org.kill-bill.billing.plugin.ruby:zendesk-plugin`.
 
 User data mapping
 -----------------
@@ -91,4 +91,4 @@ The plugin expects a `zendesk.yml` configuration file containing the following:
 ```
 
 By default, the plugin will look at the plugin directory root (where `killbill.properties` is located) to find this file.
-Alternatively, set the Kill Bill system property `-Dcom.ning.billing.osgi.bundles.jruby.conf.dir=/my/directory` to specify another location.
+Alternatively, set the Kill Bill system property `-Dorg.killbill.billing.osgi.bundles.jruby.conf.dir=/my/directory` to specify another location.
