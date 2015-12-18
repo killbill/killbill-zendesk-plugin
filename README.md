@@ -12,11 +12,6 @@ Kill Bill compatibility
 | -------------: | ----------------: |
 | 2.x.y          | 0.16.z            |
 
-Requirements
-------------
-
-The plugin needs a database. The latest version of the schema can be found [here](https://github.com/killbill/killbill-zendesk-plugin/blob/master/db/ddl.sql).
-
 User data mapping
 -----------------
 
@@ -72,7 +67,7 @@ curl -v \
 Requirements
 ------------
 
-The plugin needs a database to keep a local mapping between Kill Bill account ids and Zendesk user ids (this is to work around indexing delays in Zendesk). The latest version of the schema can be found here: https://raw.github.com/killbill/killbill-zendesk-plugin/master/db/ddl.sql.
+The plugin needs a database to keep a local mapping between Kill Bill account ids and Zendesk user ids (this is to work around indexing delays in Zendesk). The latest version of the schema can be found [here](https://raw.github.com/killbill/killbill-zendesk-plugin/master/db/ddl.sql).
 
 
 Configuration
@@ -81,7 +76,14 @@ Configuration
 The plugin expects a `zendesk.yml` configuration file containing the following:
 
 ```
-:zendesk:
+curl -v \
+     -X POST \
+     -u admin:password \
+     -H 'X-Killbill-ApiKey: bob' \
+     -H 'X-Killbill-ApiSecret: lazar' \
+     -H 'X-Killbill-CreatedBy: admin' \
+     -H 'Content-Type: text/plain' \
+     -d ':zendesk:
   :subdomain: 'mysubdomain'
   :username: 'email@domain.com'
   :password: 'password'
@@ -89,18 +91,6 @@ The plugin expects a `zendesk.yml` configuration file containing the following:
 #token: 'kX53RIXZKUFhZxSYhRxe7QGFocTkDmmERDxpcddF' 
 #access_token: 'kX53RIXZKUFhZxSYhRxe7QGFocTkDmmERDxpcddF'
 # Optional
-#  :retry: true
-
-:database:
-  :adapter: 'sqlite3'
-  :database: 'test.db'
-# For MySQL
-#  :adapter: 'jdbc'
-#  :username: 'your-username'
-#  :password: 'your-password'
-#  :driver: 'com.mysql.jdbc.Driver'
-#  :url: 'jdbc:mysql://127.0.0.1:3306/your-database'
+#  :retry: true' \
+     http://127.0.0.1:8080/1.0/kb/tenants/uploadPluginConfig/killbill-zendesk
 ```
-
-By default, the plugin will look at the plugin directory root (where `killbill.properties` is located) to find this file.
-Alternatively, set the Kill Bill system property `-Dorg.killbill.billing.osgi.bundles.jruby.conf.dir=/my/directory` to specify another location.
