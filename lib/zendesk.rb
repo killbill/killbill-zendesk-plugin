@@ -1,4 +1,5 @@
 require 'active_record'
+require 'protected_attributes'
 require 'sinatra'
 
 require 'killbill'

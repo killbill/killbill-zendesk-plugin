@@ -22,21 +22,25 @@ Gem::Specification.new do |s|
 
   s.rdoc_options << '--exclude' << '.'
 
-  s.add_dependency 'killbill', '~> 3.0.0'
+  s.add_dependency 'killbill', '~> 7.0'
+
   s.add_dependency 'sinatra', '~> 1.3.4'
   s.add_dependency 'zendesk_api', '~> 0.3.10'
-  s.add_dependency 'activerecord', '~> 3.2.1'
+  s.add_dependency 'mime-types', '< 3'
+  s.add_dependency 'protected_attributes', '~> 1.1.3'
+  s.add_dependency 'activerecord', '~> 4.1.0'
   if defined?(JRUBY_VERSION)
-    s.add_dependency 'activerecord-jdbcmysql-adapter', '~> 1.2.9'
-    # Required to avoid errors like java.lang.NoClassDefFoundError: org/bouncycastle/asn1/DERBoolean
-    s.add_dependency 'jruby-openssl', '~> 0.9.4'
+    s.add_dependency 'activerecord-bogacs', '~> 0.3'
+    s.add_dependency 'activerecord-jdbc-adapter', '~> 1.3', '< 1.5'
+    s.add_dependency 'jruby-openssl', '~> 0.9.7'
   end
 
-  s.add_development_dependency 'jbundler', '~> 0.4.1'
+  s.add_development_dependency 'jbundler', '~> 0.9.2'
   s.add_development_dependency 'rake', '>= 10.0.0'
   s.add_development_dependency 'rspec', '~> 2.12.0'
   if defined?(JRUBY_VERSION)
-    s.add_development_dependency 'activerecord-jdbcsqlite3-adapter', '~> 1.2.6'
+    s.add_development_dependency 'jdbc-sqlite3', '~> 3.7'
+    s.add_development_dependency 'jdbc-mariadb', '~> 1.1'
   else
     s.add_development_dependency 'sqlite3', '~> 1.3.7'
   end

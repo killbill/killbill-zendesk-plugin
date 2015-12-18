@@ -5,6 +5,18 @@ Plugin to mirror Kill Bill data into Zendesk.
 
 Release builds are available on [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.kill-bill.billing.plugin.ruby%22%20AND%20a%3A%22zendesk-plugin%22) with coordinates `org.kill-bill.billing.plugin.ruby:zendesk-plugin`.
 
+Kill Bill compatibility
+-----------------------
+
+| Plugin version | Kill Bill version |
+| -------------: | ----------------: |
+| 2.x.y          | 0.16.z            |
+
+Requirements
+------------
+
+The plugin needs a database. The latest version of the schema can be found [here](https://github.com/killbill/killbill-zendesk-plugin/blob/master/db/ddl.sql).
+
 User data mapping
 -----------------
 
