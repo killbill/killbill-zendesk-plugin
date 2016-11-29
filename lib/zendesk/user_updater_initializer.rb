@@ -7,7 +7,7 @@ module Killbill::Zendesk
     def initialize!(conf_dir, kb_apis, logger)
       # Parse the config file
       begin
-        @config = YAML.load_file("#{conf_dir}/zendesk.yml")
+        @config = YAML.load(ERB.new(File.read("#{conf_dir}/zendesk.yml")).result)
       rescue Errno::ENOENT
         logger.warn "Unable to find the config file #{conf_dir}/zendesk.yml"
         return
@@ -33,14 +33,14 @@ module Killbill::Zendesk
       require 'arjdbc'
 
       ::ActiveRecord::ConnectionAdapters::ConnectionHandler.connection_pool_class = ::ActiveRecord::Bogacs::FalsePool
-      db_config = {
+      db_config = @config[:database] || {
           :adapter              => :mysql,
           # See KillbillActivator#KILLBILL_OSGI_JDBC_JNDI_NAME
           :data_source          => Java::JavaxNaming::InitialContext.new.lookup('killbill/osgi/jdbc'),
           # Since AR-JDBC 1.4, to disable session configuration
           :configure_connection => false
       }
-      ActiveRecord::Base.establish_connection(@config[:database] || db_config)
+      ActiveRecord::Base.establish_connection(db_config)
 
       @updater = UserUpdater.new(client, kb_apis, logger)
     end

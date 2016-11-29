@@ -25,9 +25,6 @@ doc/
 # Build directory
 killbill-zendesk/
 
-# Config file
-zendesk.yml
-
 target
 pom.xml.asc
 
