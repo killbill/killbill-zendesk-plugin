@@ -28,14 +28,19 @@ module Killbill::Zendesk
         config.logger = logger
       end
 
-      if defined?(JRUBY_VERSION)
-        # See https://github.com/jruby/activerecord-jdbc-adapter/issues/302
-        require 'jdbc/mysql'
-        Jdbc::MySQL.load_driver(:require) if Jdbc::MySQL.respond_to?(:load_driver)
-      end
+      require 'active_record'
+      require 'active_record/bogacs'
+      require 'arjdbc'
 
-      ActiveRecord::Base.establish_connection(@config[:database])
-      ActiveRecord::Base.logger = logger
+      ::ActiveRecord::ConnectionAdapters::ConnectionHandler.connection_pool_class = ::ActiveRecord::Bogacs::FalsePool
+      db_config = {
+          :adapter              => :mysql,
+          # See KillbillActivator#KILLBILL_OSGI_JDBC_JNDI_NAME
+          :data_source          => Java::JavaxNaming::InitialContext.new.lookup('killbill/osgi/jdbc'),
+          # Since AR-JDBC 1.4, to disable session configuration
+          :configure_connection => false
+      }
+      ActiveRecord::Base.establish_connection(@config[:database] || db_config)
 
       @updater = UserUpdater.new(client, kb_apis, logger)
     end

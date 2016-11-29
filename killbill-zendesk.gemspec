@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
 
   s.author   = 'Kill Bill core team'
   s.email    = 'killbilling-users@googlegroups.com'
-  s.homepage = 'http://kill-bill.org'
+  s.homepage = 'http://killbill.io'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
 
   s.rdoc_options << '--exclude' << '.'
 
-  s.add_dependency 'killbill', '~> 7.0'
+  s.add_dependency 'killbill', '~> 8.0'
 
   s.add_dependency 'sinatra', '~> 1.3.4'
   s.add_dependency 'zendesk_api', '~> 0.3.10'

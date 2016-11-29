@@ -22,10 +22,14 @@ module Killbill::Zendesk
 
     def after_request
       # return DB connections to the Pool if required
-      ActiveRecord::Base.connection.close
+      ::ActiveRecord::Base.connection.close if ::ActiveRecord::Base.connection_pool.active_connection?
     end
 
     def on_event(event)
+      if @updater.nil?
+        logger.warn "ZendeskPlugin wasn't started properly - check logs"
+        return
+      end
       @updater.update(event.account_id) if [:ACCOUNT_CREATION, :ACCOUNT_CHANGE].include?(event.event_type)
     end
   end
