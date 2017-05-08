@@ -30,7 +30,7 @@ module Killbill::Zendesk
         logger.warn "ZendeskPlugin wasn't started properly - check logs"
         return
       end
-      @updater.update(event.account_id) if [:ACCOUNT_CREATION, :ACCOUNT_CHANGE].include?(event.event_type)
+      @updater.update(event.account_id, event.tenant_id) if [:ACCOUNT_CREATION, :ACCOUNT_CHANGE].include?(event.event_type)
     end
   end
 end

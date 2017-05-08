@@ -76,6 +76,7 @@ Configuration
 
 The plugin expects a `zendesk.yml` configuration file containing the following:
 
+- If you are using username / password authentication:
 ```
 curl -v \
      -X POST \
@@ -88,9 +89,42 @@ curl -v \
   :subdomain: 'mysubdomain'
   :username: 'email@domain.com'
   :password: 'password'
-# Alternatively, to use Token Authentication or OAuth
-#token: 'kX53RIXZKUFhZxSYhRxe7QGFocTkDmmERDxpcddF' 
-#access_token: 'kX53RIXZKUFhZxSYhRxe7QGFocTkDmmERDxpcddF'
+# Optional
+#  :retry: true' \
+     http://127.0.0.1:8080/1.0/kb/tenants/uploadPluginConfig/killbill-zendesk
+```
+
+- If you are using Token Authentication:
+```
+curl -v \
+     -X POST \
+     -u admin:password \
+     -H 'X-Killbill-ApiKey: bob' \
+     -H 'X-Killbill-ApiSecret: lazar' \
+     -H 'X-Killbill-CreatedBy: admin' \
+     -H 'Content-Type: text/plain' \
+     -d ':zendesk:
+  :subdomain: 'mysubdomain'
+  :username: 'email@domain.com'
+  :token: 'kX53RIXZKUFhZxSYhRxe7QGFocTkDmmERDxpcddF' 
+# Optional
+#  :retry: true' \
+     http://127.0.0.1:8080/1.0/kb/tenants/uploadPluginConfig/killbill-zendesk
+```
+
+- If you are using OAuth:
+```
+curl -v \
+     -X POST \
+     -u admin:password \
+     -H 'X-Killbill-ApiKey: bob' \
+     -H 'X-Killbill-ApiSecret: lazar' \
+     -H 'X-Killbill-CreatedBy: admin' \
+     -H 'Content-Type: text/plain' \
+     -d ':zendesk:
+  :subdomain: 'mysubdomain'
+  :username: 'email@domain.com'
+  :access_token: 'kX53RIXZKUFhZxSYhRxe7QGFocTkDmmERDxpcddF'
 # Optional
 #  :retry: true' \
      http://127.0.0.1:8080/1.0/kb/tenants/uploadPluginConfig/killbill-zendesk
