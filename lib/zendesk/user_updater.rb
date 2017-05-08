@@ -6,8 +6,8 @@ module Killbill::Zendesk
       @logger = logger
     end
 
-    def update(lookup_key)
-      kb_account = lookup_kb_account(lookup_key)
+    def update(lookup_key, tenant_id)
+      kb_account = lookup_kb_account(lookup_key, tenant_id)
 
       user = find_by_kb_account(kb_account)
       user = create_user(kb_account) if user.nil?
@@ -37,11 +37,11 @@ module Killbill::Zendesk
     end
 
     # Find the Kill Bill account associated with that lookup_key (account id or external key)
-    def lookup_kb_account(lookup_key)
+    def lookup_kb_account(lookup_key, tenant_id)
       if lookup_key =~ /[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}/
-        @kb_apis.account_user_api.get_account_by_id(lookup_key, @kb_apis.create_context)
+        @kb_apis.account_user_api.get_account_by_id(lookup_key, @kb_apis.create_context(tenant_id))
       else
-        @kb_apis.account_user_api.get_account_by_key(lookup_key, @kb_apis.create_context)
+        @kb_apis.account_user_api.get_account_by_key(lookup_key, @kb_apis.create_context(tenant_id))
       end
     end
 
